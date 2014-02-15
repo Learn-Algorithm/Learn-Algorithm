@@ -53,7 +53,7 @@ How?
 	1-树
 		1-二叉树
 			daimajia
-			khr
+			kehr
 			...
 			...
 		2-AVL树
