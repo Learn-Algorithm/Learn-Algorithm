@@ -2,7 +2,7 @@
 
 ### 概念：
 
-二叉查找树（Binary search tree），也叫有序二叉树（Ordered binary tree）,排序二叉树(Sorted binary tree)。是指一个孔数或者具有下列性质的二叉树：
+二叉查找树（Binary search tree），也叫有序二叉树（Ordered binary tree）,排序二叉树(Sorted binary tree)。是指一个空树或者具有下列性质的二叉树：
 
 1.	若任意节点的左子树不为空，则左子树上所有的节点值小于它的根节点值
 2.	若任意节点的右子树不为空，则右子树上所有节点的值均大于它的根节点的值
