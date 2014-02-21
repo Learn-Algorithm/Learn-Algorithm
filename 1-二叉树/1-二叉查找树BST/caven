@@ -2,9 +2,11 @@ package algorithm;
 
 import java.util.NoSuchElementException;
 
+
 //二叉树的操作类
 public class BiSearchTree {
 	public static BiSearchTNode root=new BiSearchTNode();
+	
 	//create 创建二叉查找树
 	public static BiSearchTNode create(int[] number){
 		root.setData(number[0]);
