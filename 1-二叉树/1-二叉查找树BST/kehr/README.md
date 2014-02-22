@@ -343,8 +343,9 @@ int main(void)
 
 删除BST节点部分，[百科][3]上包括书上的，读起来都比较拗口,自己简单的描述了一下,大致就是这个步骤。而且实现起来也有不同的版本。个人觉得百科上的代码要好一些，指针的指向变化比较明确。我写的与之不同，对于`T = T->lchild`这一句理解的还有问题，但是照着思路写出代码后，程序是能够正常运行的。      
 
-自己写的代码，自己不理解感觉很难过。各位，求讨论！
+自己写的代码，自己不理解感觉很难过。各位，求讨论！[我的blog][4]
 
 [1]: http://jpkc.lit.edu.cn/ds/admin/UploadFiles/20129215473684.avi "删除节点视频"
 [2]: http://zh.wikipedia.org/wiki/%E4%BA%8C%E5%85%83%E6%90%9C%E5%B0%8B%E6%A8%B9 "wikipedia abou BST"
-[3]:http://zh.wikipedia.org/wiki/%E4%BA%8C%E5%85%83%E6%90%9C%E5%B0%8B%E6%A8%B9#.E5.9C.A8.E4.BA.8C.E5.8F.89.E6.9F.A5.E6.89.BE.E6.A0.91.E5.88.A0.E9.99.A4.E7.BB.93.E7.82.B9.E7.9A.84.E7.AE.97.E6.B3.95 "维基百科，BST删除节点"
+[3]:http://zh.wikipedia.org/wiki/%E4%BA%8C%E5%85%83%E6%90%9C%E5%B0%8B%E6%A8%B9#.E5.9C.A8.E4.BA.8C.E5.8F.89.E6.9F.A5.E6.89.BE.E6.A0.91.E5.88.A0.E9.99.A4.E7.BB.93.E7.82.B9.E7.9A.84.E7.AE.97.E6.B3.95 "维基百科，BST删除节点"  
+[4]: http://ikehr.com 
