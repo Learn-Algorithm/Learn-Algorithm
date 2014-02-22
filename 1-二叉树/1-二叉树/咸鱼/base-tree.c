@@ -74,27 +74,34 @@ void level_order_traverse(BitNode *T) {
 	BitNode * node_list[MAX_COUNT] = { {0} };
 	BitNode * node = T;
 	int index = 0;
-	int flag = 2 * index + 2;
+	int length = 1;
+	int flag = 0;
 	node_list[0] = T;
-	printf("%d ", node_list[index]->item);
-	printf("\n");
 	
 	while(index < MAX_COUNT) {
-		int parent_index = index/ 2;
-		if (node_list[parent_index]->lChild == NULL)
-			break;
-		index += 1;
-		node_list[index] = node_list[parent_index]->lChild;
-		printf("%d ", node_list[index]->item);
-		index += 1;
-		if (node_list[parent_index]->rChild == NULL)
-			break;
-		node_list[index] = node_list[parent_index]->rChild;
-		printf("%d ", node_list[index]->item);
+		BitNode * node = node_list[index];
+		if (node != NULL) {
+
+			printf("%d", node->item);
+			if (node->lChild != NULL) {
+				length = 2 * index + 1;
+				node_list[2*index + 1] = node->lChild;
+			}
+			if (node->rChild != NULL) {
+				length = 2 * index + 2;
+				node_list[length] = node->rChild;
+			}
+			
+		} 
+		printf(" ");
+		if (index == length)
+				break;
+
 		if ( index == flag ) {
 			printf("\n");
 			flag = 2 * index + 2;
 		}
+		index += 1;
 	}
 }
 
