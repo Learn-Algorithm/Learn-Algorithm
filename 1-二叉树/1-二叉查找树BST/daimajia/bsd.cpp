@@ -91,7 +91,7 @@ void Delete(Tree* tree,int value){
             temp->lchild = (*tree)->lchild;
             return;
         }
-        //左右子树都不为空
+        //左右子树都为空
         if((*tree)->lchild == NULL && (*tree)->rchild == NULL){
             *tree =  NULL;
         }
