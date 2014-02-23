@@ -34,7 +34,6 @@ private:
     typedef struct tagTree
     {
         DATA data;
-        int val;
         tagTree * pLeft;
         tagTree * pRight;
     }Tree, *PTree;
