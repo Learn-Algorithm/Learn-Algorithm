@@ -63,10 +63,7 @@ bool BST::insertToTree(PTree *pTree, DATA data)
     
     if ((*pTree)->data == NULL)
     {
-        // return m_fCreate(&(*pTree)->data, data);
-        m_fCreate(&(*pTree)->data, data);
-        (*pTree)->val = *(int *)((*pTree)->data);
-        return true;
+        return m_fCreate(&(*pTree)->data, data);
     }
     
     int result = m_fCmp((*pTree)->data, data);
@@ -203,7 +200,7 @@ bool BST::remove(PTree * pTree, DATA data)
             }
             else
             {
-//                return false;
+                return false;
             }
         }
     }
