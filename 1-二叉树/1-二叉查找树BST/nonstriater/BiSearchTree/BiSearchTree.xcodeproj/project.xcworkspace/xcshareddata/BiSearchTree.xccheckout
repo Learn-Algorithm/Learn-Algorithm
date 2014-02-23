@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>3428EA7A-5284-4A0C-994E-95B28E42DA0C</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BiSearchTree</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0058CA16-AF09-4395-9B6D-B9980E85FAA1</key>
+		<string>https://github.com/nonstriater/Learn-Algorithm.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>1-二叉树/1-二叉查找树BST/nonstriater/BiSearchTree/BiSearchTree.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0058CA16-AF09-4395-9B6D-B9980E85FAA1</key>
+		<string>../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/nonstriater/Learn-Algorithm.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0058CA16-AF09-4395-9B6D-B9980E85FAA1</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0058CA16-AF09-4395-9B6D-B9980E85FAA1</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Learn-Algorithm</string>
+		</dict>
+	</array>
+</dict>
+</plist>
