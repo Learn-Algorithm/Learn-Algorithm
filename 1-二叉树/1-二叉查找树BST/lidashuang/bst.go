@@ -1,3 +1,5 @@
+// play.golang http://play.golang.org/p/t3XsHzgFAH
+
 package main
 
 import (
@@ -44,6 +46,21 @@ func serarch(key int, root *Node) *Node {
 	return root
 }
 
+func min(root *Node) *Node {
+	if root.Lchild == nil {
+		return root
+	}
+	return min(root.Lchild)
+}
+
+func deleteMin(root *Node) *Node {
+	if root.Lchild == nil {
+		return root.Rchild
+	}
+	root.Lchild = deleteMin(root.Lchild)
+	return root
+}
+
 func delete(key int, root *Node) {
 	if root == nil {
 		return
@@ -73,15 +90,13 @@ func delete(key int, root *Node) {
 		}
 
 		if root.Lchild != nil && root.Rchild != nil {
-			rchildMin := root.Rchild
-			for rchildMin.Lchild != nil {
-				rchildMin = rchildMin.Lchild
-			}
-			rchildMin.Lchild = root.Lchild
-			*root = *rchildMin
+			rchildMin := min(root.Rchild)
+			root.Rchild = deleteMin(root.Rchild)
+			root.Key = rchildMin.Key
 			return
 		}
 	}
+	return
 }
 
 type action func(node *Node)
@@ -96,9 +111,8 @@ func inOrder(root *Node, action action) {
 }
 
 func main() {
-	bst := create([]int{4, 2, 1, 3, 5, 6})
+	bst := create([]int{5, 4, 2, 1, 3, 6})
 	fmt.Println("serarch:", serarch(3, bst).Key) // should equal 3
-	fmt.Println("serarch:", serarch(4, bst).Key) // should equal 4
 	fmt.Println("serarch:", serarch(6, bst).Key) // should equal 4
 
 	// inOrder
@@ -114,20 +128,15 @@ func main() {
 		fmt.Println(node.Key)
 	}) //12346
 
-	insert(5, bst)
-
-	delete(6, bst)
-
-	fmt.Println("Inorder3: delete 6")
-	inOrder(bst, func(node *Node) {
+	//			7
+	//		3		8
+	//	2		5		9
+	//1		4		6		10
+	bst1 := create([]int{7, 3, 8, 2, 5, 9, 1, 4, 6, 10})
+	delete(3, bst1)
+	fmt.Println("bst1 inOrder:")
+	inOrder(bst1, func(node *Node) {
 		fmt.Println(node.Key)
-	}) //12345
-
-	insert(6, bst)
-
-	delete(2, bst)
-	fmt.Println("Inorder4: delete2")
-	inOrder(bst, func(node *Node) {
-		fmt.Println(node.Key)
-	}) //13456
+	})
 }
+
