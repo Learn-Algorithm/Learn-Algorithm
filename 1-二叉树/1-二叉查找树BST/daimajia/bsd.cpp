@@ -63,40 +63,46 @@ void inOrder(Tree tree){
 }
 
 void Delete(Tree* tree,int value){
-    if(tree == NULL){
+    
+    Tree temp = *tree;
+    Tree parent;
+    while(temp != NULL && temp->key != value){
+        parent = temp;
+        if(temp->key < value){
+            temp = temp->rchild;
+        }else{
+            temp = temp->lchild;
+        }
+    }
+    if(temp == NULL){
         return;
     }
-    if((*tree)->key < value){
-        return Delete(&(*tree)->rchild, value);
-    }else if((*tree)->key > value){
-        return Delete(&(*tree)->lchild, value);
-    }else if((*tree)->key == value){
+    Node* toFree;
+    toFree = temp;
+    if(temp->lchild != NULL && temp->rchild == NULL){
         //左子树不为空，右子树为空
-        if((*tree)->lchild != NULL && (*tree)->rchild == NULL){
-            *tree = (*tree)->lchild;
-            return;
-        }
+        temp = temp->lchild;
+    }else if(temp->lchild == NULL && temp->rchild !=NULL){
         //左子树为空，右子树不为空
-        if((*tree)->lchild == NULL  && (*tree)->rchild != NULL){
-            *tree = (*tree)->rchild;
-            return;
+        temp = temp->rchild;
+    }else if(temp->lchild != NULL && temp->rchild != NULL){
+        //左右子树均不为空
+        Node* loop;
+        loop = temp->rchild;
+        while (loop->lchild!=NULL) {
+            loop = loop->lchild;
         }
-        //左右子树都不为空
-        if((*tree)->lchild != NULL && (*tree)->rchild != NULL){
-            Tree temp;
-            temp = (*tree)->rchild;
-            while (temp->lchild != NULL) {
-                temp = temp->lchild;
-            }
-            temp->lchild = (*tree)->lchild;
-            return;
-        }
-        //左右子树都为空
-        if((*tree)->lchild == NULL && (*tree)->rchild == NULL){
-            *tree =  NULL;
+        loop->lchild = temp->lchild;
+        temp = temp->lchild;
+    }else{
+        //左右子树均为空
+        if(parent->lchild == temp){
+            parent->lchild = NULL;
+        }else if(parent->rchild == temp){
+            parent->rchild = NULL;
         }
     }
-    
+    free(toFree);
 }
 
 bool search(Tree tree,int value){
@@ -131,9 +137,11 @@ int main(int argc, const char * argv[])
     }else{
         printf("does not find 4\n");
     }
-    Delete(&tree, 3);
+    Delete(&tree, 8);
     inOrder(tree);
     Delete(&tree, 4);
+    inOrder(tree);
+    insert(&tree, 8);
     inOrder(tree);
     return 0;
 }
