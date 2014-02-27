@@ -85,5 +85,8 @@ coverage.xml
 *.log
 *.pot
 
+#add by andy
+*.DS_Store
+
 # Sphinx documentation
 docs/_build/
