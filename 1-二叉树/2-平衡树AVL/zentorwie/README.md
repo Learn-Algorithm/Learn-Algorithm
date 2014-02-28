@@ -1,4 +1,4 @@
-Learn-Algorithms项目作业——AVL树
+Learn-Algorithm作业——AVL树
 =======
 ##使用AVL树的案例
 +  [Flumotion](https://github.com/offlinehacker/flumotion) - 一个流媒体服务器，项目中使用AVL树来存储IP地址等数据 [具体代码](https://sourcegraph.com/github.com/offlinehacker/flumotion/symbols/python/flumotion/common/avltree/AVLTree#examples)
