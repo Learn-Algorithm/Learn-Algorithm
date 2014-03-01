@@ -34,7 +34,7 @@ int main()
 {
   int n, i, t;
   char ch;
-  AvlTree T = NULL, TT = NULL;
+  AvlTree T = NULL;
   srand((int)time(0));  // for random inserting and deleting test
   for (i = 0; i < 20; i++) {
     t = rand() % 10;
