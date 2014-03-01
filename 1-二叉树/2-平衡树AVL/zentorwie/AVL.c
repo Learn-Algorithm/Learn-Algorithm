@@ -25,6 +25,7 @@ void InOrder(AvlTree T);
 AvlTree Insert(KeyType X, AvlTree T);
 AvlTree Delete(KeyType X, AvlTree T);
 
+Position Find(KeyType X, AvlTree T);
 int Max(int A, int B);
 int Height(AvlTree T);
 Position FindMin(AvlTree T);
@@ -33,7 +34,7 @@ int main()
 {
   int n, i, t;
   char ch;
-  AvlTree T = NULL;
+  AvlTree T = NULL, TT = NULL;
   srand((int)time(0));  // for random inserting and deleting test
   for (i = 0; i < 20; i++) {
     t = rand() % 10;
@@ -181,6 +182,20 @@ AvlTree Delete(KeyType X, AvlTree T)
   if (T != NULL)
     T->height = Max(Height(T->left), Height(T->right)) + 1;
   return T;
+}
+
+Position Find(KeyType X, AvlTree T)
+{
+  if (T == NULL) {
+    printf("Key not found!\n");
+    return NULL;
+  }
+  else if (X < T->key) 
+    return Find(X, T->left);
+  else if (X > T->key)
+    return Find(X, T->right);
+  else
+    return T;
 }
 
 int Max(int A, int B)
