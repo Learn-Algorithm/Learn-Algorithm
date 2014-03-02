@@ -1,4 +1,3 @@
-
 # AVL Tree
 
 ## How to use
@@ -21,8 +20,7 @@ make clean
 
 ## 实际应用
 
-AVL Tree 和 BST
-的使用方法完全相同，只不过对于search的性能好很多，因此实用很多。找到一篇[论文][1]是将其应用于替换STM
+AVL Tree 和 BST 的使用方法完全相同，只不过对于search的性能好很多，因此实用很多。找到一篇[论文][1]是将其应用于替换STM
 (software transactional memory) 中的 concurrent skip lists, 很有意思。
 
 [1]: http://ppl.stanford.edu/papers/ppopp207-bronson.pdf "A Practical Concurrent Binary Search Tree"
