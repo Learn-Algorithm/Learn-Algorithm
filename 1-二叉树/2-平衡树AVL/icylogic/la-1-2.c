@@ -56,27 +56,6 @@ AVL* Balance(AVL* root){
     return root;
 }
 
-AVL* BSTDelete(AVL* root, KEY_TYPE key){
-    AVL* toFree = root;
-    if (root->rchild == NULL){
-        root = root->lchild;
-        free(toFree);
-        toFree = NULL;
-    } else if (root->lchild == NULL){
-        root = root->rchild;
-        free(toFree);
-        toFree = NULL;
-    } else {
-        AVL* minNode = root->rchild;
-        while (minNode->lchild != NULL){
-            minNode = minNode->lchild;
-        }
-        root->key = minNode->key;
-        root->rchild = BSTDelete(root->rchild, root->key);
-    }
-    return root;
-}
-
 void clear(AVL* root){
     if ((root)!=NULL){
         clear((root)->lchild);
@@ -159,7 +138,21 @@ AVL* Insert(AVL* root, KEY_TYPE key){
 AVL* Delete(AVL* root, KEY_TYPE key){
     if (root != NULL){
         if (key == root->key){
-            root = BSTDelete(root, key);
+            AVL* toFree = root;
+            if (root->rchild == NULL){
+                root = root->lchild;
+                free(toFree);
+            } else if (root->lchild == NULL){
+                root = root->rchild;
+                free(toFree);
+            } else {
+                AVL* minNode = root->rchild;
+                while (minNode->lchild != NULL){
+                    minNode = minNode->lchild;
+                }
+                root->key = minNode->key;
+                root->rchild = Delete(root->rchild, root->key);
+            }
         } else if (key < root->key){
             root->lchild = Delete(root->lchild, key);
         } else if (key > root->key){
@@ -171,7 +164,7 @@ AVL* Delete(AVL* root, KEY_TYPE key){
 }
     
 void InOrder(AVL* root){
-    if (root!=NULL){
+    if (root != NULL){
         InOrder(root->lchild);
         printf("%d ", root->key);
         InOrder(root->rchild);
@@ -179,21 +172,16 @@ void InOrder(AVL* root){
 }
 
 int main(){
-    AVL* root = Insert(NULL, 3);
-    root = Insert(root, 2);
+    AVL* root = Insert(NULL, 5);
+    root = Insert(root, 3);
+    root = Insert(root, 7);
     root = Insert(root, 1);
     root = Insert(root, 4);
-    root = Insert(root, 5);
     root = Insert(root, 6);
-    root = Insert(root, 7);
-    root = Insert(root, 16);
-    root = Insert(root, 15);
-    root = Insert(root, 14);
-    root = Insert(root, 13);
+    root = Insert(root, 8);
+    root = Insert(root, 9);
     InOrder(root);
-    root = Delete(root, 16);
-    root = Delete(root, 14);
-    root = Delete(root, 13);
+    root = Delete(root, 6);
     InOrder(root);
     clear(root);
     root = NULL;
