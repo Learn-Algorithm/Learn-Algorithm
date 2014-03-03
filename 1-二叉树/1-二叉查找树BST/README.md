@@ -9,8 +9,6 @@
 3.	任意节点左右子树也为二叉查找树
 4.	没有键值相等的节点
 
-![举例](http://hxraid.iteye.com/upload/picture/pic/56207/2e1d1d2e-30df-3d3f-b6dd-06af9d1e373b.gif)
-
 ### 性能分析：
 
 查找代价：
@@ -69,7 +67,7 @@ PS：参数请自行传入，函数名可改变为自己习惯的风格，但是
 
 *	首先请`fork`这个项目到自己的仓储中
 *	`git clone`自己的仓储到本地
-*	请在该目录下创建`自己id`的文件夹，如`daimajia`
+*	在`1-二叉树/1-二叉查找树BST/`目录下创建`自己id`的文件夹，如`daimajia`
 *	在自己文件夹下书写代码，完成后`git push`到自己仓储并发起`pull request`
 
 如果对`git`及`github`不熟悉的同学，可以在此学习：[http://www.worldhello.net/gotgithub/](http://www.worldhello.net/gotgithub/)，也可以在微信群或者teambition上发起讨论。
