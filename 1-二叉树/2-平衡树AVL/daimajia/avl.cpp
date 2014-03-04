@@ -114,53 +114,53 @@ void Delete(AVLTree &root,KEY_TYPE key){
     
     if (root == NULL) {
         return;
+    }else{
+        if (root->key == key) {
+            AVLTree toFree = root;
+            if (root->lchild == NULL && root->rchild == NULL) {
+                root = NULL;
+            }else if(root->lchild != NULL && root->rchild != NULL){
+                AVLTree loop = root->rchild;
+                while (loop->lchild != NULL) {
+                    loop = loop->lchild;
+                }
+                root->key = loop->key;
+                Delete(root->rchild, loop->key);
+            }else{
+                if (root->lchild!=NULL) {
+                    root = root->lchild;
+                }else{
+                    root = root->rchild;
+                }
+            }
+            free(toFree);
+        }else if(root->key < key){
+            Delete(root->rchild, key);
+        }else{
+            Delete(root->lchild, key);
+        }
     }
     
-    if (root->key == key) {
-        AVLTree toFree = root;
-        if (root->lchild == NULL && root->rchild == NULL) {
-            root = NULL;
-        }else if(root->lchild != NULL && root->rchild != NULL){
-            AVLTree loop = root->rchild;
-            while (loop->lchild != NULL) {
-                loop = loop->lchild;
-            }
-            root->key = loop->key;
-            Delete(root->rchild, loop->key);
-        }else{
-            if (root->lchild!=NULL) {
-                root = root->lchild;
-            }else{
-                root = root->rchild;
-            }
-        }
-        free(toFree);
-    }else if(root->key < key){
-        Delete(root->rchild, key);
-    }else{
-        Delete(root->lchild, key);
-    }
-
-    if(root==NULL){
+    if (root == NULL) {
         return;
     }
     
     root->height = max(GetHeight(root->lchild),GetHeight(root->rchild)) + 1;
-  
+    
     if (GetHeight(root->lchild) - GetHeight(root->rchild) == 2) {
-        if (root->lchild->key < key) {
-            LR_Rotate(root);
-        }else{
+        if (GetHeight(root->lchild) > GetHeight(root->rchild)) {
             LL_Rotate(root);
+        }else{
+            LR_Rotate(root);
         }
     }else if (GetHeight(root->rchild) - GetHeight(root->lchild) == 2) {
-        if (root->rchild->key < key) {
-            RR_Rotate(root);
-        }else{
+        if (GetHeight(root->rchild->lchild) > GetHeight(root->rchild->rchild)) {
             RL_Rotate(root);
+        }else{
+            RR_Rotate(root);
         }
     }
-
+    
 }
 
 void InOrder(AVLTree root){
@@ -184,7 +184,7 @@ int main(int argc, const char * argv[])
         Delete(tree, td);
     }
     
-
+    
     return 0;
 }
 
