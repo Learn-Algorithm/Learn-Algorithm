@@ -38,17 +38,17 @@ void create_bst(Tree &T)
 {
     KEY_TYPE key;
     T = NULL;
-    cout<<"输入要创建的树节点(end whith -1 )：";
-    while(true)
+
+    cout<<"输入要创建的树节点(end whith EOF)：";
+    
+    while(scanf("%d",&key) != EOF)
     {
-        cin>>key;
-        if ( -1 == key)
-        {
-            break;
-        }
-        insert_bst(T,key);
+       insert_bst(T,key);
     }
+
 }
+
+
 ```  
 >从输入获取节点的值，动态生成节点。	
 

@@ -27,6 +27,7 @@
  ************************************************************************/
 #include <stdlib.h>
 #include <iostream>
+#include <stdio.h>
 using namespace std;
 
 typedef int KEY_TYPE;
@@ -107,17 +108,13 @@ void create_bst(Tree &T)
     KEY_TYPE key;
     T = NULL;
 
-    cout<<"输入要创建的树节点(end whith -1 )：";
-    while(true)
+    cout<<"输入要创建的树节点(end whith EOF)：";
+    
+    while(scanf("%d",&key) != EOF)
     {
-        cin>>key;
-
-        if ( -1 == key)
-        {
-            break;
-        }
-        insert_bst(T,key);
+       insert_bst(T,key);
     }
+
 }
 
 void insert_bst(Tree &T, KEY_TYPE key)
