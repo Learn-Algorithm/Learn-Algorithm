@@ -172,20 +172,27 @@ void InOrder(AVL* root){
 }
 
 int main(){
-    AVL* root = Insert(NULL, 5);
-    root = Insert(root, 3);
-    root = Insert(root, 7);
-    root = Insert(root, 1);
-    root = Insert(root, 4);
-    root = Insert(root, 6);
-    root = Insert(root, 8);
-    root = Insert(root, 9);
-    InOrder(root);
-    root = Delete(root, 6);
-    InOrder(root);
+    AVL* root = NULL;
+    while(1){
+        int value;
+        char action;
+        printf("input a number and press Enter: ");
+        scanf("%d", &value);
+        printf("insert(i) or delete(d)?: ");
+        getchar();
+        scanf("%c", &action);
+        if (action == 'i'){
+            root = Insert(root, value);
+            InOrder(root);
+            printf("\n");
+        } else if (action == 'd'){
+            root = Delete(root, value);
+            InOrder(root);
+            printf("\n");
+        } else printf("\nplease input i or d");
+    }
     clear(root);
     root = NULL;
-    printf("\n");
     return 0;
 }
 
