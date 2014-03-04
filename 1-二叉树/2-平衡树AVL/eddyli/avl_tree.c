@@ -90,6 +90,14 @@ void level_order_traverse(AVL *T) {
 	}
 }
 
+void set_node_height(AVL* node) {
+	int lheight,rheight;
+	if (node == NULL)
+		return;
+	lheight = get_tree_height(node->lchild);
+	rheight = get_tree_height(node->rchild);
+	node->height = lheight - rheight;	
+}
 
 int get_tree_height(AVL* node) {
 	int lheight,rheight,height;
@@ -112,24 +120,16 @@ void set_parent(AVL* new_node, AVL*old_node, AVL* parent) {
 	} else {
 		assert(0);
 	}
+	set_node_height(parent);
 }
 
-void set_node_height(AVL* node) {
-	int lheight,rheight;
-	if (node == NULL)
-		return;
-	lheight = get_tree_height(node->lchild);
-	rheight = get_tree_height(node->rchild);
-	node->height = abs(lheight - rheight);	
-}
+
 
 AVL* avl_insert(AVL* node, int num) {
 	AVL **next_node = NULL;
 	AVL * ret = NULL;   //inserted node
 	AVL * rnode = NULL; //next_node
 	AVL * rret = NULL;  //rorate ret node
-	int lheight = 0;
-	int rheight = 0;
 
 	if (node->key == num) {
 		return node;
@@ -148,26 +148,28 @@ AVL* avl_insert(AVL* node, int num) {
 	} else {
 		ret = avl_insert(*next_node, num);
 	}
+
 	rnode = *next_node;
 	set_node_height(rnode);
-
-	if (rnode->height > 2) { 
-		if (lheight > rheight) {
-			if(rnode->lchild != NULL 
-				&& rnode->lchild->lchild != NULL) {
-				rret = RR_Rotate(rnode);
-			} else if(rnode->lchild != NULL 
-				&& rnode->lchild->rchild != NULL) {
-				rret = RL_Rotate(rnode);
-			}
-		} else {
-			if (rnode->rchild != NULL 
-				&& rnode->rchild->rchild != NULL) {
-				rret = LL_Rotate(rnode);
-			} else if (rnode->rchild != NULL
-				&& rnode->rchild->lchild != NULL) {
-				rret = LR_Rotate(rnode);
-			}
+	
+	if (rnode->height >= 2) { 
+		//left tree height than right
+		if(rnode->lchild != NULL 
+			&& rnode->lchild->lchild != NULL) {
+			rret = LL_Rotate(rnode);
+		} else if(rnode->lchild != NULL 
+			&& rnode->lchild->rchild != NULL) {
+			rret = LR_Rotate(rnode);
+		}
+		set_parent(rret, rnode, node);
+	} else if (rnode->height <= -2) {
+		//right tree height than left
+		if (rnode->rchild != NULL 
+			&& rnode->rchild->rchild != NULL) {
+			rret = RR_Rotate(rnode);
+		} else if (rnode->rchild != NULL
+			&& rnode->rchild->lchild != NULL) {
+			rret = RL_Rotate(rnode);
 		}
 		set_parent(rret, rnode, node);
 	}
