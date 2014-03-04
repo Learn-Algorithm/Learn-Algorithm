@@ -10,18 +10,13 @@
 #include <iostream>
 
 using namespace std;
-//typedef int KEY_TYPE;
-//typedef struct AVL{
-//    KEY_TYPE key;
-//    int height;
-//    struct AVL* lchild;
-//    struct AVL* rchild;
-//}AVL;
+
 
 void TurnTree(AVL ** pRoot, KEY_TYPE key);
 
 AVL* RR_Rotate(AVL* k2)
 {
+    cout << "RR key: " << k2->key <<endl;
     AVL * pRoot = k2->rchild;
     pRoot->height = pRoot->rchild==NULL ? 1 : 0;
     k2->rchild = pRoot->lchild;
@@ -40,6 +35,7 @@ AVL* RR_Rotate(AVL* k2)
 
 AVL* LL_Rotate(AVL* k2)
 {
+    cout << "LL key: " << k2->key <<endl;
     AVL * pRoot = k2->lchild;
     pRoot->height = pRoot->lchild==NULL ? -1 :0;
     k2->lchild = pRoot->rchild;
@@ -119,6 +115,7 @@ AVL* Insert(AVL* root, KEY_TYPE key)
             if ((*pIdx)->lchild == NULL)
             {
                 (*pIdx)->lchild = CreateNode(key);
+                cout<<"New Node: "<< key << " Parent: "<< (*pIdx)->key <<endl;
                 (*pIdx)->height += 1;
                 break;
             }
@@ -131,6 +128,7 @@ AVL* Insert(AVL* root, KEY_TYPE key)
             {
                 (*pIdx)->rchild = CreateNode(key);
                 (*pIdx)->height -= 1;
+                cout<<"New Node: "<< key << " Parent: "<< (*pIdx)->key <<endl;
                 break;
             }
             pIdx = &(*pIdx)->rchild;
@@ -174,7 +172,7 @@ void TurnTree(AVL ** pRoot, KEY_TYPE key)
     }
     else
     {
-        if (pRet->key > key)
+        if (pRet->rchild->key > key)
         {
             pRet->rchild = LL_Rotate(pRet->rchild);
         }
@@ -222,6 +220,7 @@ void printInOrder(AVL * root)
 
 AVL* Delete(AVL* root, KEY_TYPE key)
 {
+
     return NULL;
 }
 
