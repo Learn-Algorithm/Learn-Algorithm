@@ -141,6 +141,10 @@ void Delete(AVLTree &root,KEY_TYPE key){
         Delete(root->lchild, key);
     }
 
+    if(root==NULL){
+        return;
+    }
+    
     root->height = max(GetHeight(root->lchild),GetHeight(root->rchild)) + 1;
   
     if (GetHeight(root->lchild) - GetHeight(root->rchild) == 2) {
