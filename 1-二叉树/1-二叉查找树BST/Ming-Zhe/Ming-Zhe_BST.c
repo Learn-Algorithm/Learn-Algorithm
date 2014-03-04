@@ -64,7 +64,6 @@ bool insertNode(int key, bst_node *root){
     if(pre == NULL)
         root = curr;
     else{
-        
         if (curr->data < pre->data) {
             pre->lchild=curr;
         }
