@@ -6,7 +6,7 @@
 //  Copyright (c) 2014年 daimajia. All rights reserved.
 //
 
-#include <iostream>
+#include <stdio.h>
 #include <stdlib.h>
 
 typedef int KEY_TYPE;
@@ -148,13 +148,13 @@ void Delete(AVLTree &root,KEY_TYPE key){
     root->height = max(GetHeight(root->lchild),GetHeight(root->rchild)) + 1;
     
     if (GetHeight(root->lchild) - GetHeight(root->rchild) == 2) {
-        if (GetHeight(root->lchild) > GetHeight(root->rchild)) {
+        if (GetHeight(root->lchild->rchild) < GetHeight(root->lchild->lchild)) {
             LL_Rotate(root);
         }else{
             LR_Rotate(root);
         }
     }else if (GetHeight(root->rchild) - GetHeight(root->lchild) == 2) {
-        if (GetHeight(root->rchild->lchild) > GetHeight(root->rchild->rchild)) {
+        if (GetHeight(root->rchild->rchild) < GetHeight(root->rchild->lchild)  ) {
             RL_Rotate(root);
         }else{
             RR_Rotate(root);
