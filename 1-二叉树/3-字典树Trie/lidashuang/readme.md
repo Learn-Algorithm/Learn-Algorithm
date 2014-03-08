@@ -64,3 +64,6 @@ roger	52
 * [Trie](http://www.cs.bu.edu/teaching/c/tree/trie/)
 * [http://dongxicheng.org/structure/trietree/](数据结构之Trie树)
 * http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/Text/trie01.html
+* [tengine trie tree useragent](http://tengine.taobao.org/download/programmer-201209-Tengine.pdf)
+* [Double array trie](http://linux.thai.net/~thep/datrie/datrie.html)
+
