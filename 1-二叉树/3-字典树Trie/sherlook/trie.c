@@ -14,7 +14,6 @@
 typedef struct Node
 {
 	int count;
-	char value;
 	struct Node* child[MAX_LETTER_NUM];
 } Node, *Trie;
 
