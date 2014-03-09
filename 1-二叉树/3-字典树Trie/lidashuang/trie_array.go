@@ -56,11 +56,30 @@ func (tree *TrieTree) Search(str string) int {
     }
     ptr = ptr.Child[idx]
   }
-  return ptr.Count
+
+  if ptr.IsEnd {
+    return ptr.Count
+  }
+  return 0
 }
 
-// todo
 func (tree *TrieTree) Remove(str string) {
+  ptr := tree.Root
+  for _, ch := range str {
+    idx := int(ch) - Aval
+    if ptr.Child[idx] == nil {
+      return
+    }
+    ptr = ptr.Child[idx]
+  }
+
+  if ptr.Count > 0 {
+    ptr.Count--
+  }
+
+  if ptr.Count == 0 {
+    ptr.IsEnd = false
+  }
 }
 
 func main() {
@@ -71,4 +90,10 @@ func main() {
   }
 
   fmt.Printf("%d\n", tree.Search("ann")) // should 2
+  fmt.Printf("%d\n", tree.Search("an"))  // should 0
+
+  tree.Remove("ann")
+  fmt.Printf("%d\n", tree.Search("ann")) // should 1
+  tree.Remove("ann")
+  fmt.Printf("%d\n", tree.Search("ann")) // should 0
 }
