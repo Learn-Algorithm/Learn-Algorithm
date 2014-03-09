@@ -69,7 +69,7 @@ void Delete(const char word[], int len, Trie* root) {
 			return;
 		ptr = ptr -> child[index];
 	}
-    if(ptr != 0)
+        if(ptr -> count != 0)
 	   ptr -> count -= 1;
 }
 
