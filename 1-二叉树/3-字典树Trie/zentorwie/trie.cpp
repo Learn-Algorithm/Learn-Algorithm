@@ -7,8 +7,8 @@
 #define MAX 26
 
 struct Trie {
-  int cnt;  
-  int end_cnt;  
+  int cnt;      //前缀出现次数
+  int end_cnt;  //单词词频
   struct Trie* next[MAX];
 };
 
@@ -24,6 +24,7 @@ Trie* NewTrie()
 void Insert(Trie* T, char* s);
 void Remove(Trie* T, char* s);
 int Query(Trie* T, char* s);
+
 int main()
 {
   Trie* T = NewTrie();
@@ -53,6 +54,7 @@ int main()
   return 0;
 }
 
+//插入s到字典树中，维护end_cnt成员表示单词词频
 void Insert(Trie* T, char* s)
 {
   Trie* p = T;
@@ -67,7 +69,7 @@ void Insert(Trie* T, char* s)
   p->end_cnt++;
 }
 
-// This function is not so perfect. It can only remove those words that exist.
+// 不完美，还不能检查是否输入了字典树中不存在的单词
 void Remove(Trie* T, char* s)
 {
   Trie* p = T;
@@ -88,6 +90,7 @@ void Remove(Trie* T, char* s)
   }
 }
 
+// 查找单词s，返回s出现的次数，若返回0表示找不到s
 int Query(Trie* T, char* s)
 {
   Trie* p = T;
