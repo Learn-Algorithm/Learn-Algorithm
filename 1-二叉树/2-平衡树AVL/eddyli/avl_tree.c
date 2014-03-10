@@ -50,7 +50,8 @@ AVL * create_avl_tree(int* num, int len) {
 		return NULL;
 	root->key = num[0];
 	for (;i < len; i++) {
-		avl_insert(root, num[i]);
+		//root maybe changed
+		avl_insert(&root, num[i]);
 	}
 	return root;
 }
@@ -90,15 +91,6 @@ void level_order_traverse(AVL *T) {
 	}
 }
 
-void set_node_height(AVL* node) {
-	int lheight,rheight;
-	if (node == NULL)
-		return;
-	lheight = get_tree_height(node->lchild);
-	rheight = get_tree_height(node->rchild);
-	node->height = lheight - rheight;	
-}
-
 int get_tree_height(AVL* node) {
 	int lheight,rheight,height;
 	if (node == NULL)
@@ -108,6 +100,16 @@ int get_tree_height(AVL* node) {
 	height = lheight > rheight ? lheight : rheight;
 	return height + 1;
 }
+
+void set_node_height(AVL* node) {
+	int lheight,rheight;
+	if (node == NULL)
+		return;
+	lheight = get_tree_height(node->lchild);
+	rheight = get_tree_height(node->rchild);
+	node->height = lheight - rheight;	
+}
+
 
 void set_parent(AVL* new_node, AVL*old_node, AVL* parent) {
 	assert(new_node != NULL 
@@ -120,16 +122,47 @@ void set_parent(AVL* new_node, AVL*old_node, AVL* parent) {
 	} else {
 		assert(0);
 	}
-	set_node_height(parent);
 }
 
 
+AVL*  check_and_rorate(AVL * rnode, AVL* parent) {
+	AVL * rret = rnode;
+	if (rnode == NULL)
+		return;
+	if (rnode->height >= 2) { 
+		//left tree height than right
+		if(rnode->lchild != NULL 
+			&& rnode->lchild->lchild != NULL) {
+			rret = LL_Rotate(rnode);
+		} else if(rnode->lchild != NULL 
+			&& rnode->lchild->rchild != NULL) {
+			rret = LR_Rotate(rnode);
+		}
 
-AVL* avl_insert(AVL* node, int num) {
+		if (parent != NULL) {
+			set_parent(rret, rnode, parent);
+		}
+		
+	} else if (rnode->height <= -2) {
+		//right tree height than left
+		if (rnode->rchild != NULL 
+			&& rnode->rchild->rchild != NULL) {
+			rret = RR_Rotate(rnode);
+		} else if (rnode->rchild != NULL
+			&& rnode->rchild->lchild != NULL) {
+			rret = RL_Rotate(rnode);
+		}
+		if (parent != NULL) {
+			set_parent(rret, rnode, parent);
+		}
+	}
+	return rret;
+}
+
+AVL* _avl_insert(AVL* node, int num) {
 	AVL **next_node = NULL;
 	AVL * ret = NULL;   //inserted node
 	AVL * rnode = NULL; //next_node
-	AVL * rret = NULL;  //rorate ret node
 
 	if (node->key == num) {
 		return node;
@@ -146,33 +179,21 @@ AVL* avl_insert(AVL* node, int num) {
 		(*next_node)->height = 0;
 		ret = *next_node;
 	} else {
-		ret = avl_insert(*next_node, num);
+		ret = _avl_insert(*next_node, num);
 	}
-
 	rnode = *next_node;
 	set_node_height(rnode);
-	
-	if (rnode->height >= 2) { 
-		//left tree height than right
-		if(rnode->lchild != NULL 
-			&& rnode->lchild->lchild != NULL) {
-			rret = LL_Rotate(rnode);
-		} else if(rnode->lchild != NULL 
-			&& rnode->lchild->rchild != NULL) {
-			rret = LR_Rotate(rnode);
-		}
-		set_parent(rret, rnode, node);
-	} else if (rnode->height <= -2) {
-		//right tree height than left
-		if (rnode->rchild != NULL 
-			&& rnode->rchild->rchild != NULL) {
-			rret = RR_Rotate(rnode);
-		} else if (rnode->rchild != NULL
-			&& rnode->rchild->lchild != NULL) {
-			rret = RL_Rotate(rnode);
-		}
-		set_parent(rret, rnode, node);
-	}
+	check_and_rorate(rnode, node);
+	return ret;
+}
+
+AVL* avl_insert(AVL** node, int num) {
+	AVL *ret = NULL;
+	AVL *rret = NULL;
+	ret = _avl_insert(*node, num);
+	set_node_height(*node);
+	rret = check_and_rorate(*node, NULL);
+	*node = rret;
 	return ret;
 }
 
