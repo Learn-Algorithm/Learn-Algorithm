@@ -20,17 +20,16 @@ TrieTree::~TrieTree()
     Clear();
 }
 
-TrieTree::Node ** TrieTree::InitSubTreeWith(const char *szWord)
+TrieTree::Node ** TrieTree::CreateSubTreeWith(const char *szWord)
 {
     unsigned long ulLen = strlen(szWord);
     
-    Node ** pSubTree = new Node * [2];
+    Node ** pSubTree = new Node * [2]; //extra one for null ptr
     if (pSubTree == NULL)
     {
         return NULL;
     }
     memset(pSubTree, 0, sizeof(*pSubTree) * 2);
-    
     if (ulLen == 1)
     {
         *pSubTree = new Node(szWord[0], 1);
@@ -38,17 +37,18 @@ TrieTree::Node ** TrieTree::InitSubTreeWith(const char *szWord)
     else
     {
         (*pSubTree) = new Node(szWord[0], 0);
-        (*pSubTree)->pSubTree = InitSubTreeWith(szWord+1);
+        (*pSubTree)->pSubTree = CreateSubTreeWith(szWord+1);
     }
     return pSubTree;
 }
 
-TrieTree::Node * TrieTree::FindCharFromTree(char ch, Node ** pSubTree)
+TrieTree::Node * TrieTree::FindCharFromSubTree(char ch, Node ** pSubTree)
 {
     if (pSubTree == NULL)
     {
         return NULL;
     }
+
     Node * pIdx = NULL;
     for (pIdx = *pSubTree; pIdx != NULL; pIdx = *(++pSubTree))
     {
@@ -60,7 +60,7 @@ TrieTree::Node * TrieTree::FindCharFromTree(char ch, Node ** pSubTree)
     return NULL;
 }
 
-bool TrieTree::InitNewSubTreeWithOld(Node *** pSubTree, const char * szWord)
+bool TrieTree::CreateNewSubTreeWithOld(Node *** pSubTree, const char * szWord)
 {
     unsigned long ulLen = strlen(szWord);
     
@@ -77,7 +77,6 @@ bool TrieTree::InitNewSubTreeWithOld(Node *** pSubTree, const char * szWord)
     unsigned long ulCpySzie = pInsertPos == NULL ? 0 : pInsertPos - *pSubTree + 1;
     unsigned long ulElements = pIdx - *pSubTree + 1;
     Node ** pNewTree = new Node * [ulElements+1];
-    
     if (pNewTree == NULL)
     {
         return false;
@@ -86,14 +85,15 @@ bool TrieTree::InitNewSubTreeWithOld(Node *** pSubTree, const char * szWord)
     memcpy(pNewTree, *pSubTree, sizeof(*pNewTree) * ulCpySzie);
     *(pNewTree+ulCpySzie) = new Node(szWord[0], ulLen==1 ? 1 : 0);
     
-    ((*(pNewTree+ulCpySzie))->pSubTree = ulLen==1 ? NULL : InitSubTreeWith(szWord+1));
+    ((*(pNewTree+ulCpySzie))->pSubTree = ulLen==1 ? NULL : CreateSubTreeWith(szWord+1));
     memcpy(pNewTree+ulCpySzie+1, (*pSubTree)+ulCpySzie, sizeof(*pNewTree) * (ulElements-ulCpySzie));
     delete [] *pSubTree;
     *pSubTree = pNewTree;
+
     return true;
 }
 
-bool TrieTree::InsertToTree(Node *** pSubTree, const char *szWord)
+bool TrieTree::InsertToSubTree(Node *** pSubTree, const char *szWord)
 {
     unsigned long ulLen = strlen(szWord);
     
@@ -104,10 +104,10 @@ bool TrieTree::InsertToTree(Node *** pSubTree, const char *szWord)
     
     if (*pSubTree == NULL)
     {
-        return (*pSubTree = InitSubTreeWith(szWord)) == NULL ? false : true;
+        return (*pSubTree = CreateSubTreeWith(szWord)) == NULL ? false : true;
     }
     
-    Node * pTarget = FindCharFromTree(szWord[0], *pSubTree);
+    Node * pTarget = FindCharFromSubTree(szWord[0], *pSubTree);
     if (pTarget != NULL)
     {
         if (ulLen == 1)
@@ -117,20 +117,20 @@ bool TrieTree::InsertToTree(Node *** pSubTree, const char *szWord)
         }
         else if (pTarget->pSubTree)
         {
-            return InsertToTree(&pTarget->pSubTree, szWord+1);
+            return InsertToSubTree(&pTarget->pSubTree, szWord+1);
         }
         else
         {
-            return (pTarget->pSubTree = InitSubTreeWith(szWord+1)) == NULL ? false : true;
+            return (pTarget->pSubTree = CreateSubTreeWith(szWord+1)) == NULL ? false : true;
         }
     }
     
-    return InitNewSubTreeWithOld(pSubTree, szWord);
+    return CreateNewSubTreeWithOld(pSubTree, szWord);
 }
 
 bool TrieTree::Insert(const char *szWord)
 {
-    return InsertToTree(&m_pHead, szWord);
+    return InsertToSubTree(&m_pHead, szWord);
 }
 
 int TrieTree::Query(const char *szWord)
@@ -144,7 +144,7 @@ int TrieTree::Query(const char *szWord)
     int count = 0;
     for (pIdx = m_pHead; pIdx!=NULL && *pIdx != NULL; pIdx = pIdx+1)
     {
-        if ((count= QueryInNode(*pIdx, szWord)) != 0)
+        if ((count= QueryFromNode(*pIdx, szWord)) != 0)
         {
             return count;
         }
@@ -152,9 +152,8 @@ int TrieTree::Query(const char *szWord)
     return 0;
 }
 
-int TrieTree::QueryInNode(TrieTree::Node *pNode, const char * szWord)
+int TrieTree::QueryFromNode(TrieTree::Node *pNode, const char * szWord)
 {
-    
     if (pNode->ch ^ szWord[0])
     {
         return 0;
@@ -163,19 +162,19 @@ int TrieTree::QueryInNode(TrieTree::Node *pNode, const char * szWord)
     {
         return pNode->count;
     }
+
     Node ** pIdx = NULL;
     int count = 0;
-    
     for (pIdx = pNode->pSubTree; pIdx!= NULL && *pIdx != NULL; pIdx = pIdx+1)
     {
-        if ((count = QueryInNode(*pIdx, szWord+1 )) != 0)
+        if ((count = QueryFromNode(*pIdx, szWord+1 )) != 0)
         {
             return count;
         }
     }
     return 0;
 }
-//..............................................................................
+
 void TrieTree::PrintAll()
 {
     if (m_pHead == NULL)
@@ -216,10 +215,10 @@ void TrieTree::Remove(const char *szWord)
         return;
     }
     
-    SearchAndRemvoeFromSubTree(&m_pHead, szWord);
+    RemoveFromSubTree(&m_pHead, szWord);
 }
 
-bool TrieTree::SearchAndRemvoeFromSubTree(Node *** pTree, const char *szWord)
+bool TrieTree::RemoveFromSubTree(Node *** pTree, const char *szWord)
 {
     Node ** pIdx = NULL;
     Node ** pNodeToDel = NULL;
@@ -235,7 +234,7 @@ bool TrieTree::SearchAndRemvoeFromSubTree(Node *** pTree, const char *szWord)
     if (pNodeToDel != NULL)
     {
         unsigned long ulLenToCpy = pNodeToDel - *pTree;
-        if (RemoveNode(pNodeToDel, szWord))
+        if (RemoveFromNode(pNodeToDel, szWord))
         {
             if (*pNodeToDel == NULL)
             {
@@ -267,7 +266,7 @@ bool TrieTree::SearchAndRemvoeFromSubTree(Node *** pTree, const char *szWord)
     return true;
 }
 
-bool TrieTree::RemoveNode(Node ** pTree, const char *szWord)
+bool TrieTree::RemoveFromNode(Node ** pTree, const char *szWord)
 {
     if (strlen(szWord) == 1 )
     {
@@ -283,7 +282,7 @@ bool TrieTree::RemoveNode(Node ** pTree, const char *szWord)
         return true;
     }
     
-    if (SearchAndRemvoeFromSubTree(&(*pTree)->pSubTree, szWord+1))
+    if (RemoveFromSubTree(&(*pTree)->pSubTree, szWord+1))
     {
         if ((*pTree)->count == 0 && (*pTree)->pSubTree == NULL)
         {
