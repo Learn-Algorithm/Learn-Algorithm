@@ -19,62 +19,95 @@ typedef struct trie
     struct trie *subtries[MAX_NUM];     // 子树
 }trie,*trietree;
 
-bool Insert (trietree* root,  char* world);
-int  Query  (trietree* root,  char* world);
-bool Remove_not_free (trietree* root,  char* world);          // 删除单词，减少 count 值,但不free内存
-bool Remove_whith_free (trietree* root,  char* world);        // 删除单词。减少 count 值,free内存（待完成）
+bool Insert (trietree* root,  char* word);
+int  Query  (trietree* root,  char* word);
+bool Remove_not_free (trietree* root,  char* word);          // 删除单词，减少 count 值,但不free内存
+bool Remove_whith_free (trietree* root,  char* word);        // 删除单词。减少 count 值,free内存（待完成）
 trietree new_node (char key);
 
 int main()
 {
-    trietree root = new_node('#');
-    int count;
+    trietree root = new_node ('#');
+    int count, flag;
+    char* word;
 
-    printf("\n-------------------insert start\n");
-    Insert(&root,"a");
-    Insert(&root,"ab");
-    Insert(&root,"abc");
-    Insert(&root,"abc");
-    Insert(&root,"abcd");
-    Insert(&root,"abcd");
-    Insert(&root,"abcde");
-    Insert(&root,"abcdef");
+    while (true)
+    {
+        printf ("\n[0] exit    [1] insert    [2] remove    [3] query\n");
+        printf ("option:");
+        scanf ("%d",&flag);
 
-    printf("\n-------------------query start\n");
-    count = Query(&root,"abcdef");
-    printf ("count=%d\n",count);
+        if (0 == flag) break;
 
-    printf("\n-------------------remove start\n");
-    Remove_not_free(&root,"abcdef");
+        switch (flag )
+        {
+            case 1:
 
-    printf("\n-------------------remove start\n");
-    Remove_not_free(&root,"abcdef");
+                printf ("\n输入待插入的单词，以空格分开（end with EOF）:");
 
-    printf("\n-------------------query start\n");
-    count = Query(&root,"abcdef");
-    printf ("count=%d\n",count);
+                while (scanf("%s",word) != EOF)
+                {
+                    Insert (&root, word);
+                }
+
+                break;
+
+            case 2:
+
+                printf ("\n输入待删除的单词：");
+                scanf ("%s",word);
+
+                Remove_not_free(&root,word);
+
+                break;
+
+            case 3:
+
+                printf ("\n输入待查询的单词：");
+                scanf ("%s",word);
+
+                count = Query (&root,word);
+
+                if (!count)
+                {
+                    printf ("\n单词不存在！\n");
+                }
+                else
+                {
+                    printf ("\n%s 的引用共有 %d 个。\n",word,count);
+                }
+
+                break;
+
+            default:
+
+                printf ("Invalid option!\n");
+
+                break;
+        }
+    }
 
     return 0;
 }
 
-bool Insert (trietree* root,  char* world)
+bool Insert (trietree* root,  char* word)
 {
     trietree tree = *root;
 
     while (1)
     {
-        int index = *world - 'a';
+        int index = *word - 'a';
 
         if (NULL == tree -> subtries[index])
         {
-            tree -> subtries[index] = new_node(*world);
+            tree -> subtries[index] = new_node(*word);
         }
 
-        printf ("key=%c index=%d\n",*world, index);
+        printf ("key=%c index=%d\n",*word, index);
 
-        world++;
+        word++;
 
-        if (!*world)
+        if (!*word)
         {
             tree->count += 1;                           // 标记完整单词（黄色节点），即单词最后一个节点。
             break;
@@ -88,7 +121,7 @@ bool Insert (trietree* root,  char* world)
     return true;
 }
 
-int  Query (trietree* root, char* world)
+int  Query (trietree* root, char* word)
 {
     trietree tree = *root;
     int count = 0;
@@ -96,20 +129,20 @@ int  Query (trietree* root, char* world)
     while (1)
     {
 
-        int index = *world -'a';
+        int index = *word -'a';
 
-        if(NULL == tree->subtries[index])
+        if (NULL == tree->subtries[index])
         {
-            printf("count=%d\n",count);
+            printf ("\nword does not exit!\n");
             return count;
         }
 
-        printf ("word=%s\n",world);
-        printf("tree->count=%d\n",tree->count);
+        printf ("word=%s\n",word);
+        printf ("tree->count=%d\n",tree->count);
 
-        world++;
+        word++;
 
-        if(!*world)
+        if(!*word)
         {
             count = tree->count;
             break;
@@ -124,30 +157,30 @@ int  Query (trietree* root, char* world)
     return count;
 }
 
-bool Remove_not_free (trietree* root, char* world)
+bool Remove_not_free (trietree* root, char* word)
 {
     trietree tree = *root;
 
     while (1)
     {
-        int index = *world - 'a';
+        int index = *word - 'a';
 
-        printf ("remove--world:%s\n",world); 
+        printf ("remove--word:%s\n",word); 
 
-        world++;
+        word++;
 
-        if (!*world)                                        // 找到该单词的黄色节点，count--，不free节点。
+        if (!*word)                                        // 找到该单词的黄色节点，count--，不free节点。
         {
             if ( tree->count > 0)
             {
-                printf("remove--tree--from--count=%d\n",tree->count);
+                printf ("remove--tree--from--count=%d\n",tree->count);
                 tree->count--;   
-                printf("remove--tree--to----count=%d\n",tree->count);
+                printf ("remove--tree--to----count=%d\n",tree->count);
                 break;
             }
             else                                           // cout == 0, 说明单词已经被删除
             {
-                printf("your world does not exit !\n");   
+                printf ("your word does not exit !\n");   
                 return false;
             }
         }
@@ -165,7 +198,7 @@ trietree new_node (char key)
     trietree node;
     if (NULL == (node = (trietree) malloc (sizeof(trie))))
     {
-        exit(1);
+        exit (1);
     }
     node->value = key;
     node->count = 0;
