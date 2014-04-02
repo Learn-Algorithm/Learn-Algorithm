@@ -48,32 +48,65 @@
 
 int main()
 {
-    trietree root = new_node('#');
-    int count;
+    trietree root = new_node ('#');
+    int count, flag;
+    char* word;
 
-    printf("\n-------------------insert start\n");
-    Insert(&root,"a");
-    Insert(&root,"ab");
-    Insert(&root,"abc");
-    Insert(&root,"abc");
-    Insert(&root,"abcd");
-    Insert(&root,"abcd");
-    Insert(&root,"abcde");
-    Insert(&root,"abcdef");
+    while (true)
+    {
+        printf ("\n[0] exit    [1] insert    [2] remove    [3] query\n");
+        printf ("option:");
+        scanf ("%d",&flag);
 
-    printf("\n-------------------query start\n");
-    count = Query(&root,"abcdef");
-    printf ("count=%d\n",count);
+        if (0 == flag) break;
 
-    printf("\n-------------------remove start\n");
-    Remove_not_free(&root,"abcdef");
+        switch (flag )
+        {
+            case 1:
 
-    printf("\n-------------------remove start\n");
-    Remove_not_free(&root,"abcdef");
+                printf ("\n输入待插入的单词，以空格分开（end with EOF）:");
 
-    printf("\n-------------------query start\n");
-    count = Query(&root,"abcdef");
-    printf ("count=%d\n",count);
+                while (scanf("%s",word) != EOF)
+                {
+                    Insert (&root, word);
+                }
+
+                break;
+
+            case 2:
+
+                printf ("\n输入待删除的单词：");
+                scanf ("%s",word);
+
+                Remove_not_free(&root,word);
+
+                break;
+
+            case 3:
+
+                printf ("\n输入待查询的单词：");
+                scanf ("%s",word);
+
+                count = Query (&root,word);
+
+                if (!count)
+                {
+                    printf ("\n单词不存在！\n");
+                }
+                else
+                {
+                    printf ("\n%s 的引用共有 %d 个。\n",word,count);
+                }
+
+                break;
+
+            default:
+
+                printf ("Invalid option!\n");
+
+                break;
+        }
+    }
 
     return 0;
 }
@@ -84,87 +117,85 @@ int main()
 
 ```bash
 
-➜  kehr git:(master) ✗ > ./trie 
+➜  kehr git:(master) ✗ > ./trie
 
--------------------insert start
-key=a index=0
-key=a index=0
-key=b index=1
-key=a index=0
-key=b index=1
-key=c index=2
-key=a index=0
-key=b index=1
-key=c index=2
-key=a index=0
-key=b index=1
-key=c index=2
-key=d index=3
-key=a index=0
-key=b index=1
-key=c index=2
-key=d index=3
-key=a index=0
-key=b index=1
-key=c index=2
-key=d index=3
-key=e index=4
-key=a index=0
-key=b index=1
-key=c index=2
-key=d index=3
-key=e index=4
-key=f index=5
+[0] exit    [1] insert    [2] remove    [3] query
+option:1
 
--------------------query start
-word=abcdef
+输入待插入的单词，以空格分开（end with EOF）:a ab abc abc abc
+key=a index=0
+key=a index=0
+key=b index=1
+key=a index=0
+key=b index=1
+key=c index=2
+key=a index=0
+key=b index=1
+key=c index=2
+key=a index=0
+key=b index=1
+key=c index=2
+
+[0] exit    [1] insert    [2] remove    [3] query
+option:3
+
+输入待查询的单词：abc
+word=abc
 tree->count=1
-word=bcdef
+word=bc
 tree->count=1
-word=cdef
+word=c
+tree->count=3
+
+abc 的引用共有 3 个。
+
+[0] exit    [1] insert    [2] remove    [3] query
+option:2
+
+输入待删除的单词：abc
+remove--word:abc
+remove--word:bc
+remove--word:c
+remove--tree--from--count=3
+remove--tree--to----count=2
+
+[0] exit    [1] insert    [2] remove    [3] query
+option:3
+
+输入待查询的单词：abc
+word=abc
+tree->count=1
+word=bc
+tree->count=1
+word=c
 tree->count=2
-word=def
-tree->count=2
-word=ef
-tree->count=1
-word=f
-tree->count=1
-count=1
 
--------------------remove start
-remove--world:abcdef
-remove--world:bcdef
-remove--world:cdef
-remove--world:def
-remove--world:ef
-remove--world:f
+abc 的引用共有 2 个。
+
+[0] exit    [1] insert    [2] remove    [3] query
+option:2
+
+输入待删除的单词：ab
+remove--word:ab
+remove--word:b
 remove--tree--from--count=1
 remove--tree--to----count=0
 
--------------------remove start
-remove--world:abcdef
-remove--world:bcdef
-remove--world:cdef
-remove--world:def
-remove--world:ef
-remove--world:f
-your world does not exit !
+[0] exit    [1] insert    [2] remove    [3] query
+option:3
 
--------------------query start
-word=abcdef
+输入待查询的单词：ab
+word=ab
 tree->count=1
-word=bcdef
-tree->count=1
-word=cdef
-tree->count=2
-word=def
-tree->count=2
-word=ef
-tree->count=1
-word=f
+word=b
 tree->count=0
-count=0
+
+单词不存在！
+
+[0] exit    [1] insert    [2] remove    [3] query
+option:0
 ➜  kehr git:(master) ✗ > 
+
 ```
 
 [1]:http://www.cs.waikato.ac.nz/Teaching/COMP317B/Week_4/digital_search_tree.html
