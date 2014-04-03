@@ -11,37 +11,46 @@ struct Trie
 
 typedef struct Trie Trie;
 
-int char2index(char p, Trie* Node) {
+int char2index(char p, Trie* node) {
 	int i = 0;
-	for (; i < Node->childcount; i++) {
-		if (Node->subtries[i]->value == p)
+	/*
+		since we support all char not only a-z
+		so we must find the char
+		this cause the insert and query
+		method's best time complexity
+		is o(logn) worst Time complexity is o(n)
+		TODO:we should use a map to do char2index
+		so the Time complexity should always be o(logn)
+	*/
+	for (; i < node->childcount; i++) {
+		if (node->subtries[i]->value == p)
 			return i;
 	}
 	return -1;
 }
 
-Trie *_insert(char p, Trie* Node) {
+Trie *_insert(char p, Trie* node) {
 	int index;
 	int count;
-	index = char2index(p, Node);
-	count = Node->childcount;
+	index = char2index(p, node);
+	count = node->childcount;
 	if (index == -1) {
-		Node->subtries = (Trie**)realloc(
-			Node->subtries,
+		node->subtries = (Trie**)realloc(
+			node->subtries,
 			(count+1) * sizeof(Trie*)
 		);
-		Node->subtries[count] = (Trie*)calloc(1, sizeof(Trie));
-		Node->subtries[count]->value = p;
-		index = Node->childcount;
-		Node->childcount += 1;
+		node->subtries[count] = (Trie*)calloc(1, sizeof(Trie));
+		node->subtries[count]->value = p;
+		index = node->childcount;
+		node->childcount += 1;
 	}
-	return Node->subtries[index];
+	return node->subtries[index];
 }
 
-Trie *Insert(char *p, int count, Trie* Node) {
+Trie *Insert(char *p, int count, Trie* node) {
 	int i;
-	Trie * tnode = Node;
-	if (p == NULL || Node == NULL || count <= 0)
+	Trie * tnode = node;
+	if (p == NULL || node == NULL || count <= 0)
 		return NULL;
 	for(i = 0; i < count; i++) {
 		tnode = _insert(p[i], tnode);
@@ -50,19 +59,38 @@ Trie *Insert(char *p, int count, Trie* Node) {
 	return tnode;
 }
 
-int Query(char *p, int count, Trie* Node) {
+int Query(char *p, int count, Trie* node) {
 	int i;
 	int index = 0;
-	Trie * node = Node;
+	Trie * _node = node;
 	for (i = 0; i < count; i++) {
-		index = char2index(p[i], node);
+		index = char2index(p[i], _node);
 		if (index == -1)
 			return -1;
 		else
-			node = node->subtries[index];
+			_node = _node->subtries[index];
 	}
 	return 0;
 }
+
+
+int Delete(char *p, int count, Trie* node) {
+	int i;
+	int index = 0;
+	Trie * _node = node;
+	for (i = 0; i < count; i++) {
+		index = char2index(p[i], _node);
+		if (index == -1)
+			return -1;
+		else
+			_node = _node->subtries[index];
+	}
+	if (_node->count == 0)
+		return -1;
+	_node->count -= 1;
+	return 0;
+}
+
 
 int main() {
 	Trie node;
@@ -79,4 +107,6 @@ int main() {
 	Query("how",3,&node);
 	Insert("你好", 6, &node);
 	Query("你好",6,&node);
+	Delete("你好",6,&node);
+	printf("%d",Query("你好",6,&node));
 }
