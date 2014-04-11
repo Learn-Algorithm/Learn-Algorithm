@@ -16,11 +16,20 @@ class TrieTree
 public:
     TrieTree();
     ~TrieTree();
-    
+
+    // Insert 'Word' to Trie.
     bool Insert(const char *szWord);
+    
+    // Remove this 'Word' from TrieTree
     void Remove(const char *szWord);
+
+    // Query this 'Word' from TrieTree
     int Query(const char *szWord);
+
+    // Print All from the tree.
     void PrintAll();
+    
+    // Clear the tree
     void Clear();
     
 private:
@@ -44,19 +53,35 @@ private:
         }
     }Node;
     
-    Node ** InitSubTreeWith(const char *szWord);
-    Node * FindCharFromTree(char ch, Node ** pSubTree);
-    bool InsertToTree(Node *** pNode, const char *szWord);
-    bool InitNewSubTreeWithOld(Node *** pSubTree, const char * szWord);
+    // Find if a char in subtree's nodes
+    Node * FindCharFromSubTree(char ch, Node ** pSubTree);
+
+    // Insert the Word to subtree
+    bool InsertToSubTree(Node *** pNode, const char *szWord);
+
+    // Create a new subtree with an old one
+    bool CreateNewSubTreeWithOld(Node *** pSubTree, const char * szWord);
     
-    int QueryInNode(Node *pIdx, const char * szWord);
+    // Creat a new subtree with Word
+    Node ** CreateSubTreeWith(const char *szWord);
     
-    void PrintNode(const Node* pNode, const char * szPrefix="");
+    // Query the word from node
+    int QueryFromNode(Node *pIdx, const char * szWord);
     
-    bool RemoveNode(Node ** pNode, const char *szWord);
-    bool SearchAndRemvoeFromSubTree(Node *** pNode, const char *szWord);
+    // remove word from node
+    bool RemoveFromNode(Node ** pNode, const char *szWord);
+    
+    // remove the word from subtree
+    bool RemoveFromSubTree(Node *** pNode, const char *szWord);
+    
+    // Clear node and its subtree
     void ClearNode(Node ** pNode);
+    
+    // Clear the subtree
     void ClearSubTree(Node *** pNode);
+
+    // Help to print
+    void PrintNode(const Node* pNode, const char * szPrefix="");
     
     Node ** m_pHead;
 };
