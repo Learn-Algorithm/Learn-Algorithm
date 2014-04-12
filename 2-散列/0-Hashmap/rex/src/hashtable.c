@@ -32,18 +32,33 @@ HashTable* ht_init(int size){
  * @param  skey hash node key
  * @return      [description]
  */
-unsigned int ht_hash_function(const char* skey)
-{
-    const signed char *p = (const signed char*)skey;
-    unsigned int h = *p;
+// unsigned int ht_hash_function(const char* skey)
+// {
+//     const signed char *p = (const signed char*)skey;
+//     unsigned int h = *p;
 
-    if(h)
+//     if(h)
+//     {
+//         for(p += 1; *p != '\0'; ++p)
+//             h = (h << 5) - h + *p;
+//     }
+//     return h;
+// }
+
+// BKDR Hash Function
+unsigned int ht_hash_function(const char *str)
+{
+    unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
+    unsigned int hash = 0;
+
+    while (*str)
     {
-        for(p += 1; *p != '\0'; ++p)
-            h = (h << 5) - h + *p;
+        hash = hash * seed + (*str++);
     }
-    return h;
+
+    return (hash & 0x7FFFFFFF);
 }
+
 
 /**
  * @brief insert key-value into hash table
@@ -73,7 +88,7 @@ int ht_insert(HashTable* hash_table, const char* skey, Node* pvalue){
         ///check whether the key is exist
         if(strcmp(pHead->sKey, skey) == 0)
         {
-            printf("%s already exists!\n", skey);
+            // printf("%s already exists!\n", skey);
             free(pvalue);
             return -1;
         }
