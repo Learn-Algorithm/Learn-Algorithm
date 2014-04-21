@@ -1,9 +1,9 @@
 #include <iostream>
-#include "stdio.h"
-#include "stdlib.h"
+#include <fstream>
 #include <string>
 #include <ctime>
 #include <cmath>
+#include <stdlib.h>
 #include <time.h>
 
 using namespace std;
@@ -17,12 +17,7 @@ int main() {
     const int min = 97;
     const int max = 122;
 
-    FILE* fp;
-
-    if((fp=fopen("inputfile.txt","w"))==NULL){
-        printf("cannotopenthefile.\n");
-        exit(0);
-    }
+    ofstream fout("inputfile.txt");
 
     for(int i = 0 ; i < MAX ; i++) {
         string word;
@@ -30,11 +25,9 @@ int main() {
     	    char temp = min+rand()%(max-min);
             word += temp;
         }
-        word+='\n';
-        fputs(word.c_str(),fp);
+        fout << word << endl;
     }
-
-    fclose(fp);
+    
 
 	return 0;
 }
