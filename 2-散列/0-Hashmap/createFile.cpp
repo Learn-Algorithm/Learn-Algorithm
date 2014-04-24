@@ -11,7 +11,7 @@ using namespace std;
 #define MAX 500000000
 
 int main() {
-   
+
     srand(time(0));
 
     const int min = 97;
@@ -22,12 +22,12 @@ int main() {
     for(int i = 0 ; i < MAX ; i++) {
         string word;
         for(int j = 0 ; j < 3 ; j++) {
-    	    char temp = min+rand()%(max-min);
+            char temp = min+rand()%(max-min);
             word += temp;
         }
         fout << word << endl;
     }
-    
 
-	return 0;
+
+    return 0;
 }
